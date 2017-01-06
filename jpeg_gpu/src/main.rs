@@ -67,7 +67,8 @@ fn main() {
 
     if args.len() > 1 {
         let name = &args[1];
-        let img = image::load_from_memory_with_format(&load_file(name), image::ImageFormat::JPEG);
+        let slice = &load_file(name);
+        let img = image::load_from_memory_with_format(slice, image::ImageFormat::JPEG);
         match img {
             Ok(data) => {
                 let (width, height) = data.dimensions();
@@ -156,6 +157,14 @@ fn main() {
                 let mut done = false;
 
                 while !done {
+                    let img = image::load_from_memory_with_format(slice, image::ImageFormat::JPEG);
+                    match img {
+                        Err(err) => {
+                            println!("Error loading image {}: {}", name, err)
+                        }
+                        _ => {}
+                    }
+
                     gl::clear(gl::COLOR_BUFFER_BIT);
                     renderer.update();
 
