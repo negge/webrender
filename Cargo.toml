@@ -1,5 +1,6 @@
 [workspace]
 members = [
+	"jpeg_gpu",
 	"webrender",
 	"webrender_traits",
 	"sample",
