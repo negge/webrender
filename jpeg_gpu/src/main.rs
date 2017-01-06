@@ -153,7 +153,9 @@ fn main() {
                     builder);
                 api.set_root_pipeline(pipeline_id);
 
-                for event in window.wait_events() {
+                let mut done = false;
+
+                while !done {
                     gl::clear(gl::COLOR_BUFFER_BIT);
                     renderer.update();
 
@@ -161,17 +163,18 @@ fn main() {
 
                     window.swap_buffers().ok();
 
-                    match event {
-                        glutin::Event::Closed => break,
-                        glutin::Event::KeyboardInput(_element_state, scan_code, _virtual_key_code) => {
-                            if scan_code == 9 {
-                                break;
+                    for event in window.poll_events() {
+                        match event {
+                            glutin::Event::Closed => done = true,
+                            glutin::Event::KeyboardInput(_element_state, scan_code, _virtual_key_code) => {
+                                if scan_code == 9 {
+                                    done = true;
+                                }
                             }
+                            _ => ()
                         }
-                        _ => ()
                     }
                 }
-
             }
             Err(err) => {
                 println!("Error loading image {}: {}", name, err)
